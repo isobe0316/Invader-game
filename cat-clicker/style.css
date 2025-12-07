@@ -1,0 +1,578 @@
+:root {
+  --bg-color: #fff0f5;
+  /* Lavender Blush */
+  --primary-color: #ffb7b2;
+  /* Pastel Red */
+  --secondary-color: #b5ead7;
+  /* Pastel Green */
+  --accent-color: #c7ceea;
+  /* Pastel Purple */
+  --text-color: #555;
+  --card-bg: #ffffff;
+  --bar-bg: #e0e0e0;
+  --bar-fill: #ff9aa2;
+}
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+header {
+  text-align: center;
+  background: var(--card-bg);
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+  z-index: 10;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+.score-board {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff9aa2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Game Area */
+.game-area {
+  flex: 1;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  cursor: none;
+  /* Hide default cursor for laser */
+}
+
+/* Laser Pointer */
+.laser-point {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 10px red, 0 0 20px red;
+  pointer-events: none;
+  z-index: 200;
+  transform: translate(-50%, -50%);
+}
+
+.laser-point.hidden {
+  display: none;
+}
+
+.cat-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: top 0.1s linear, left 0.1s linear;
+  /* Smooth movement */
+}
+
+.cat-wrapper {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cat-wrapper.eating {
+  animation: bounce 0.5s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Mouse Target */
+.mouse-target {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Combo Display */
+.combo-display {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+.combo-display.hidden {
+  opacity: 0;
+}
+
+/* Nurturing Panel */
+.nurturing-panel {
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: 15px 15px 0 0;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+  max-height: 35vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.growth-container {
+  margin-bottom: 15px;
+}
+
+.growth-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #666;
+}
+
+.collection-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.growth-bar-bg {
+  width: 100%;
+  height: 20px;
+  background-color: var(--bar-bg);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.growth-bar-fill {
+  height: 100%;
+  background-color: var(--bar-fill);
+  width: 0%;
+  transition: width 0.5s ease-out;
+}
+
+.shop-list {
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+}
+
+/* Cat Styles */
+.cat-shape {
+  position: relative;
+  width: 180px;
+  height: 160px;
+}
+
+.cat-face {
+  width: 100%;
+  height: 100%;
+  background-color: #2a2a2a;
+  border-radius: 40% 40% 45% 45%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s;
+}
+
+/* Evolution Forms */
+/* King Cat */
+.cat-wrapper.king .cat-face {
+  background-color: #f1c40f;
+}
+
+/* Gold */
+.cat-wrapper.king .cat-accessory.crown {
+  display: block;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 50px;
+}
+
+/* Chubby Cat */
+.cat-wrapper.chubby .cat-face {
+  border-radius: 50%;
+  width: 110%;
+  left: -5%;
+}
+
+/* Rounder */
+.cat-wrapper.chubby .cat-nose {
+  width: 15px;
+  height: 10px;
+}
+
+/* Wild Cat */
+.cat-wrapper.wild .cat-face {
+  background-color: #5d4037;
+  border-radius: 30% 30% 40% 40%;
+}
+
+/* Brown, Sharp */
+.cat-wrapper.wild .cat-accessory.scar {
+  display: block;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #ffeb3b;
+  font-size: 30px;
+}
+
+.cat-wrapper.wild .cat-eye {
+  border-color: #d32f2f;
+}
+
+/* Accessories */
+.cat-accessory {
+  position: absolute;
+  z-index: 10;
+}
+
+.cat-accessory.hidden {
+  display: none;
+}
+
+/* ... (Keep existing ear/eye/whisker styles) ... */
+.cat-ear {
+  position: absolute;
+  top: -25px;
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 60px solid #2a2a2a;
+  z-index: 1;
+}
+
+.cat-ear.left {
+  left: 5px;
+  transform: rotate(-25deg);
+}
+
+.cat-ear.right {
+  right: 5px;
+  transform: rotate(25deg);
+}
+
+.cat-ear::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -12px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 35px solid #444;
+  opacity: 0.8;
+}
+
+.cat-eye {
+  position: absolute;
+  top: 40%;
+  width: 40px;
+  height: 40px;
+  background-color: #ffcc00;
+  border-radius: 50%;
+  border: 2px solid #000;
+  overflow: hidden;
+}
+
+.cat-eye.left {
+  left: 20%;
+}
+
+.cat-eye.right {
+  right: 20%;
+}
+
+.cat-eye .pupil {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 28px;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+.cat-eye::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.cat-nose {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 6px;
+  background-color: #ff9aa2;
+  border-radius: 50%;
+}
+
+.cat-mouth {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 15px;
+  border-bottom: 2px solid #ccc;
+  border-radius: 50%;
+}
+
+.cat-whiskers {
+  position: absolute;
+  top: 65%;
+  width: 30%;
+  height: 0;
+}
+
+.cat-whiskers.left-side {
+  left: 5%;
+}
+
+.cat-whiskers.right-side {
+  right: 5%;
+}
+
+.cat-whiskers span {
+  position: absolute;
+  width: 50px;
+  height: 2px;
+  background-color: #888;
+  border-radius: 2px;
+}
+
+.cat-whiskers.left-side span {
+  right: 0;
+  transform-origin: right center;
+}
+
+.cat-whiskers.left-side span:nth-child(1) {
+  top: -12px;
+  transform: rotate(5deg);
+}
+
+.cat-whiskers.left-side span:nth-child(2) {
+  top: 4px;
+  transform: rotate(0deg);
+}
+
+.cat-whiskers.left-side span:nth-child(3) {
+  top: 20px;
+  transform: rotate(-5deg);
+}
+
+.cat-whiskers.right-side span {
+  left: 0;
+  transform-origin: left center;
+}
+
+.cat-whiskers.right-side span:nth-child(1) {
+  top: -12px;
+  transform: rotate(-5deg);
+}
+
+.cat-whiskers.right-side span:nth-child(2) {
+  top: 4px;
+  transform: rotate(0deg);
+}
+
+.cat-whiskers.right-side span:nth-child(3) {
+  top: 20px;
+  transform: rotate(5deg);
+}
+
+/* Floating Text */
+.floating-text {
+  position: absolute;
+  color: #ff9aa2;
+  font-weight: bold;
+  font-size: 1.2rem;
+  pointer-events: none;
+  animation: floatUp 0.8s ease-out forwards;
+  z-index: 200;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+/* Modal */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 15px;
+  position: relative;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.collection-item {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.collection-item.unlocked {
+  opacity: 1;
+  background-color: #fff0f5;
+  border-color: #ffb7b2;
+}
+
+.collection-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.collection-name {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Desktop Optimization */
+@media (min-width: 768px) {
+  #app {
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  header {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  main {
+    height: 600px;
+  }
+
+  .game-area {
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .nurturing-panel {
+    max-height: 600px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .cat-shape {
+    width: 250px;
+    height: 220px;
+  }
+}

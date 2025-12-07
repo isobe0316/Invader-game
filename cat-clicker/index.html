@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>猫あつめクリッカー</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <h1>猫あつめクリッカー</h1>
+      <div class="score-board">
+        <span class="icon">🐟</span>
+        <span id="niboshi-count">0</span>
+        <span class="unit">にぼし</span>
+      </div>
+      <div class="stats">
+        <p>クリック力: <span id="click-power">1</span></p>
+        <p>自動: <span id="auto-power">0</span> /秒</p>
+      </div>
+    </header>
+
+    <main>
+      <div id="game-area" class="game-area">
+        <div id="laser-point" class="laser-point hidden"></div>
+        <div class="cat-container">
+          <div id="combo-display" class="combo-display hidden">
+            <span id="combo-count">0</span> COMBO! <span id="combo-multiplier">x1.0</span>
+          </div>
+
+          <div id="main-cat" class="cat-wrapper">
+            <div class="cat-shape">
+              <div class="cat-ear left"></div>
+              <div class="cat-ear right"></div>
+              <div class="cat-face">
+                <div class="cat-eye left">
+                  <div class="pupil"></div>
+                </div>
+                <div class="cat-eye right">
+                  <div class="pupil"></div>
+                </div>
+                <div class="cat-nose"></div>
+                <div class="cat-mouth"></div>
+                <div class="cat-whiskers left-side">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="cat-whiskers right-side">
+                  <span></span><span></span><span></span>
+                </div>
+                <!-- Accessories -->
+                <div class="cat-accessory crown hidden">👑</div>
+                <div class="cat-accessory scar hidden">⚡</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section class="nurturing-panel">
+      <div class="growth-container">
+        <div class="growth-info">
+          <span>Lv. <span id="cat-level">1</span> <span id="cat-name">子猫</span></span>
+          <button id="collection-btn" class="collection-btn">📖 図鑑</button>
+        </div>
+        <div class="growth-bar-bg">
+          <div id="growth-bar" class="growth-bar-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <h2>ご飯ショップ</h2>
+      <div id="food-list" class="shop-list">
+        <!-- Food items injected here -->
+      </div>
+    </section>
+
+    <!-- Collection Modal -->
+    <div id="collection-modal" class="modal hidden">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>猫図鑑</h2>
+        <div id="collection-grid" class="collection-grid">
+          <!-- Collection items injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
